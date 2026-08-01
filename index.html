@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For My Queen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --night-deep:#0a0e27;
+    --night-mid:#151b3b;
+    --gold:#d4af7a;
+    --rose:#e8b4b8;
+    --wine:#6b2737;
+    --cream:#f5efe6;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--night-deep);
+    color:var(--cream);
+    font-family:'Jost',sans-serif;
+    overflow-x:hidden;
+    position:relative;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
+  }
+
+  /* starfield */
+  #stars{position:fixed;inset:0;z-index:0;pointer-events:none;}
+  .star{
+    position:absolute;
+    background:var(--cream);
+    border-radius:50%;
+    opacity:0.6;
+    animation:twinkle 4s ease-in-out infinite;
+  }
+  @keyframes twinkle{
+    0%,100%{opacity:0.15; transform:scale(1);}
+    50%{opacity:0.9; transform:scale(1.4);}
+  }
+
+  .drift{
+    position:fixed;
+    top:-5%;
+    font-size:1.2rem;
+    color:var(--rose);
+    opacity:0;
+    z-index:1;
+    pointer-events:none;
+    animation:fall linear forwards;
+  }
+  @keyframes fall{
+    0%{opacity:0; transform:translateY(0) rotate(0deg);}
+    10%{opacity:0.8;}
+    90%{opacity:0.8;}
+    100%{opacity:0; transform:translateY(110vh) rotate(360deg);}
+  }
+
+  section{
+    position:relative;
+    z-index:2;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:6vh 6vw;
+  }
+
+  .eyebrow{
+    font-family:'Jost',sans-serif;
+    letter-spacing:0.35em;
+    text-transform:uppercase;
+    font-size:0.7rem;
+    color:var(--gold);
+    opacity:0;
+    margin-bottom:1.4rem;
+  }
+
+  h1,h2{
+    font-family:'Cormorant Garamond',serif;
+    font-weight:500;
+    line-height:1.15;
+  }
+  h1{
+    font-size:clamp(2.6rem,8vw,5.5rem);
+    background:linear-gradient(180deg,var(--cream) 20%,var(--gold) 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    opacity:0;
+  }
+  h2{
+    font-size:clamp(1.8rem,5vw,3.2rem);
+    color:var(--cream);
+    opacity:0;
+  }
+  p.lede{
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;
+    font-size:clamp(1.1rem,2.4vw,1.5rem);
+    max-width:640px;
+    color:var(--rose);
+    margin-top:1.6rem;
+    opacity:0;
+    line-height:1.6;
+  }
+  .body-text{
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(1.15rem,2.6vw,1.6rem);
+    max-width:600px;
+    line-height:1.75;
+    color:var(--cream);
+    opacity:0;
+  }
+
+  .reveal{animation:riseIn 1.4s ease forwards;}
+  .reveal.d1{animation-delay:0.15s;}
+  .reveal.d2{animation-delay:0.5s;}
+  .reveal.d3{animation-delay:0.9s;}
+  @keyframes riseIn{
+    from{opacity:0; transform:translateY(28px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  .scrollcue{
+    position:absolute;
+    bottom:6vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:0.6rem;
+    opacity:0;
+    animation:riseIn 1.4s ease forwards 1.6s;
+  }
+  .scrollcue span{
+    font-size:0.65rem;
+    letter-spacing:0.3em;
+    text-transform:uppercase;
+    color:var(--gold);
+  }
+  .scrollcue .line{
+    width:1px;
+    height:38px;
+    background:linear-gradient(var(--gold),transparent);
+    animation:pulseLine 2s ease-in-out infinite;
+  }
+  @keyframes pulseLine{
+    0%,100%{opacity:0.3;}
+    50%{opacity:1;}
+  }
+
+  .divider{
+    width:60px;
+    height:1px;
+    background:var(--gold);
+    margin:2rem auto;
+    opacity:0.6;
+  }
+
+  /* section-specific accents */
+  #hero .halo{
+    position:absolute;
+    width:340px;height:340px;
+    border-radius:50%;
+    background:radial-gradient(circle,rgba(212,175,122,0.15) 0%,transparent 70%);
+    top:50%;left:50%;
+    transform:translate(-50%,-50%);
+    z-index:-1;
+    animation:breathe 5s ease-in-out infinite;
+  }
+  @keyframes breathe{
+    0%,100%{transform:translate(-50%,-50%) scale(1);}
+    50%{transform:translate(-50%,-50%) scale(1.15);}
+  }
+
+  #chapter-mark{
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;
+    color:var(--gold);
+    font-size:1rem;
+    letter-spacing:0.08em;
+  }
+
+  /* constellation canvas for "chapter 3" */
+  .constellation-wrap{
+    position:relative;
+    width:min(90vw,520px);
+    height:280px;
+    margin:2.4rem auto 0;
+    opacity:0;
+  }
+  #heartCanvas{width:100%;height:100%;display:block;}
+
+  /* closing interactive */
+  .queen-title{
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;
+    font-size:clamp(2.2rem,6vw,4rem);
+    color:var(--gold);
+    opacity:0;
+  }
+  .btn{
+    margin-top:2.6rem;
+    padding:0.95rem 2.6rem;
+    background:transparent;
+    border:1px solid var(--gold);
+    color:var(--gold);
+    font-family:'Jost',sans-serif;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    font-size:0.75rem;
+    cursor:pointer;
+    border-radius:2px;
+    transition:background 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;
+    opacity:0;
+  }
+  .btn:hover, .btn:focus-visible{
+    background:var(--gold);
+    color:var(--night-deep);
+    box-shadow:0 0 26px rgba(212,175,122,0.55);
+  }
+  .btn:focus-visible{outline:2px solid var(--rose); outline-offset:3px;}
+
+  #finalMsg{
+    margin-top:2.4rem;
+    max-width:560px;
+    font-family:'Cormorant Garamond',serif;
+    font-size:clamp(1.2rem,2.8vw,1.6rem);
+    line-height:1.8;
+    color:var(--cream);
+    min-height:2rem;
+  }
+  .cursor{
+    display:inline-block;
+    width:2px;
+    background:var(--gold);
+    margin-left:2px;
+    animation:blink 0.9s step-end infinite;
+  }
+  @keyframes blink{50%{opacity:0;}}
+
+  .heart-burst{
+    position:fixed;
+    z-index:5;
+    pointer-events:none;
+    font-size:1.4rem;
+    color:var(--rose);
+    animation:burst 1.6s ease-out forwards;
+  }
+  @keyframes burst{
+    0%{opacity:1; transform:translate(0,0) scale(0.6);}
+    100%{opacity:0; transform:translate(var(--dx),var(--dy)) scale(1.3);}
+  }
+
+  footer{
+    position:relative;
+    z-index:2;
+    text-align:center;
+    padding:3rem 1rem 4rem;
+    font-family:'Cormorant Garamond',serif;
+    font-style:italic;
+    color:rgba(245,239,230,0.4);
+    font-size:0.95rem;
+  }
+</style>
+</head>
+<body>
+
+<div id="stars"></div>
+
+<section id="hero">
+  <div class="halo"></div>
+  <p class="eyebrow reveal d1">Girlfriend&rsquo;s Day</p>
+  <h1 class="reveal d2">For My Queen</h1>
+  <p class="lede reveal d3">Every star out tonight is just another reason I found to love you.</p>
+  <div class="scrollcue"><span>scroll</span><div class="line"></div></div>
+</section>
+
+<section id="ch1">
+  <p id="chapter-mark" class="reveal d1">chapter one</p>
+  <h2 class="reveal d2">My Best Friend</h2>
+  <div class="divider reveal d2"></div>
+  <p class="body-text reveal d3">Before anything else, before the love songs and the late-night calls, you were my best friend &mdash; the one person I never had to pretend with. The one who makes ordinary days feel like the ones worth remembering.</p>
+</section>
+
+<section id="ch2">
+  <p id="chapter-mark" class="reveal d1">chapter two</p>
+  <h2 class="reveal d2">All This Time</h2>
+  <div class="divider reveal d2"></div>
+  <p class="body-text reveal d3">We&rsquo;ve been together for so long now, and somehow you still make my heart do that thing it did on day one. Every year with you has only made me surer &mdash; this is the person I want next to me, always.</p>
+</section>
+
+<section id="ch3">
+  <p id="chapter-mark" class="reveal d1">chapter three</p>
+  <h2 class="reveal d2">My Forever</h2>
+  <div class="divider reveal d2"></div>
+  <p class="body-text reveal d3">I don&rsquo;t just love being with you &mdash; I want a whole lifetime of it. I want to marry you, my Queen. Not someday far away, but soon. I want your name next to mine for good.</p>
+  <div class="constellation-wrap reveal d3"><canvas id="heartCanvas"></canvas></div>
+</section>
+
+<section id="closing">
+  <p class="eyebrow reveal d1">Happy Girlfriend&rsquo;s Day</p>
+  <p class="queen-title reveal d2">To my Queen, my best friend, my forever.</p>
+  <button class="btn reveal d3" id="loveBtn">tap here, my love</button>
+  <p id="finalMsg"></p>
+</section>
+
+<footer>made with all my heart, for you</footer>
+
+<script>
+// starfield
+const starsContainer = document.getElementById('stars');
+const STAR_COUNT = 90;
+for(let i=0;i<STAR_COUNT;i++){
+  const s = document.createElement('div');
+  s.className='star';
+  const size = Math.random()*2 + 0.6;
+  s.style.width = size+'px';
+  s.style.height = size+'px';
+  s.style.left = Math.random()*100+'vw';
+  s.style.top = Math.random()*100+'vh';
+  s.style.animationDuration = (2.5 + Math.random()*4)+'s';
+  s.style.animationDelay = (Math.random()*4)+'s';
+  starsContainer.appendChild(s);
+}
+
+// gentle drifting petals/hearts across whole page
+const symbols = ['♡','✧','·'];
+function spawnDrift(){
+  const el = document.createElement('div');
+  el.className='drift';
+  el.textContent = symbols[Math.floor(Math.random()*symbols.length)];
+  el.style.left = Math.random()*100+'vw';
+  el.style.animationDuration = (8+Math.random()*7)+'s';
+  el.style.fontSize = (0.8+Math.random()*1.2)+'rem';
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(), 16000);
+}
+setInterval(spawnDrift, 1400);
+spawnDrift();
+
+// scroll-triggered reveals (re-trigger by toggling animation via class swap)
+const revealEls = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.style.animationPlayState='running';
+      entry.target.classList.add('in-view');
+    }
+  });
+},{threshold:0.35});
+revealEls.forEach(el=>{
+  el.style.animationPlayState='paused';
+  io.observe(el);
+});
+// hero should play immediately
+document.querySelectorAll('#hero .reveal').forEach(el=>el.style.animationPlayState='running');
+
+// constellation heart made of connected stars, drawn as it scrolls into view
+const canvas = document.getElementById('heartCanvas');
+const ctx = canvas.getContext('2d');
+function resizeCanvas(){
+  const rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width = rect.width * devicePixelRatio;
+  canvas.height = rect.height * devicePixelRatio;
+  ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+}
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+
+function heartPoint(t, w, h){
+  // parametric heart
+  const x = 16*Math.pow(Math.sin(t),3);
+  const y = 13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t);
+  return {
+    x: w/2 + x * (w/40),
+    y: h/2 - y * (h/34) + h*0.06
+  };
+}
+
+let points = [];
+function buildPoints(){
+  const rect = canvas.parentElement.getBoundingClientRect();
+  points = [];
+  const n = 60;
+  for(let i=0;i<n;i++){
+    const t = (i/n) * Math.PI * 2;
+    points.push(heartPoint(t, rect.width, rect.height));
+  }
+}
+buildPoints();
+window.addEventListener('resize', buildPoints);
+
+let drawProgress = 0;
+let animating = false;
+function drawConstellation(){
+  const rect = canvas.parentElement.getBoundingClientRect();
+  ctx.clearRect(0,0,rect.width,rect.height);
+  const count = Math.floor(points.length * drawProgress);
+
+  ctx.strokeStyle = 'rgba(212,175,122,0.55)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  for(let i=0;i<count;i++){
+    const p = points[i];
+    if(i===0) ctx.moveTo(p.x,p.y); else ctx.lineTo(p.x,p.y);
+  }
+  ctx.stroke();
+
+  for(let i=0;i<count;i++){
+    const p = points[i];
+    ctx.beginPath();
+    ctx.fillStyle = i % 5 === 0 ? '#f5efe6' : 'rgba(232,180,184,0.85)';
+    const r = i % 5 === 0 ? 2.2 : 1.2;
+    ctx.arc(p.x,p.y,r,0,Math.PI*2);
+    ctx.fill();
+  }
+
+  if(drawProgress < 1){
+    drawProgress += 0.006;
+    requestAnimationFrame(drawConstellation);
+  }
+}
+
+const ch3Observer = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting && !animating){
+      animating = true;
+      buildPoints();
+      requestAnimationFrame(drawConstellation);
+    }
+  });
+},{threshold:0.4});
+ch3Observer.observe(document.querySelector('.constellation-wrap'));
+
+// final typewriter message + heart burst button
+const finalMessage = "Happy Girlfriend's Day, my love. Thank you for every ordinary day you made beautiful. I can't wait to marry my best friend.";
+const finalMsgEl = document.getElementById('finalMsg');
+let typed = false;
+function typeMessage(){
+  if(typed) return;
+  typed = true;
+  let i = 0;
+  const cursor = document.createElement('span');
+  cursor.className='cursor';
+  cursor.textContent='\u00A0';
+  function step(){
+    if(i <= finalMessage.length){
+      finalMsgEl.textContent = finalMessage.slice(0,i);
+      finalMsgEl.appendChild(cursor);
+      i++;
+      setTimeout(step, 32);
+    } else {
+      cursor.remove();
+    }
+  }
+  step();
+}
+
+const loveBtn = document.getElementById('loveBtn');
+loveBtn.addEventListener('click', (e)=>{
+  typeMessage();
+  const heartsToSpawn = 18;
+  for(let i=0;i<heartsToSpawn;i++){
+    const h = document.createElement('div');
+    h.className='heart-burst';
+    h.textContent = ['♡','❤','✦'][Math.floor(Math.random()*3)];
+    const angle = Math.random()*Math.PI*2;
+    const dist = 80 + Math.random()*180;
+    h.style.setProperty('--dx', Math.cos(angle)*dist+'px');
+    h.style.setProperty('--dy', Math.sin(angle)*dist+'px');
+    h.style.left = e.clientX+'px';
+    h.style.top = e.clientY+'px';
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(), 1700);
+  }
+});
+</script>
+</body>
+</html>
